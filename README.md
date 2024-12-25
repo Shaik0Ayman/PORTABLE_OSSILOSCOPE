@@ -11,7 +11,7 @@ A portable oscilloscope based on the ESP32 microcontroller, enhanced with additi
 - [Hardware Requirements](#hardware-requirements)
 - [Circuit Diagram and Connections](#circuit-diagram-and-connections)
 - [Simulation](#simulation)
-- [Installation](#installation)
+- [Setup and Installation](#setup-and-installation)
 - [Usage](#usage)
 - [Modifications and Enhancements](#modifications-and-enhancements)
 - [Acknowledgements](#acknowledgements)
@@ -114,83 +114,182 @@ To help you understand and test the oscilloscope without physical hardware, a si
 - **Visualize Connections**: Helps in understanding how components are connected.
 - **Learning Tool**: Great for educational purposes to learn about microcontrollers and electronics.
 
-## Installation
+## Setup and Installation
 
-1. **Clone the Repository**:
+Follow these instructions to set up and install the Portable Oscilloscope on your ESP32.
+
+### 1. Copy Files to Project Directory
+
+Copy all files from this package to the `Esp32_oscilloscope` directory on your computer.
+
+### 2. Open the Project in Arduino IDE
+
+- Open `Esp32_oscilloscope.ino` with the Arduino IDE.
+
+### 3. Configure Wi-Fi Settings
+
+- Find and open the `Esp32_servers_config.h` file.
+- Locate the following lines:
+
+  ```cpp
+  #define STA_SSID "YOUR-STA-SSID"
+  #define STA_PASSWORD "YOUR-STA-PASSWORD"
+  ```
+
+- Replace `"YOUR-STA-SSID"` with your Wi-Fi network's SSID.
+- Replace `"YOUR-STA-PASSWORD"` with your Wi-Fi network's password.
+
+### 4. Select Partition Scheme
+
+The oscilloscope uses the LittleFS file system, so you need to select an appropriate partition scheme.
+
+- In the Arduino IDE, go to **Tools** > **Partition Scheme**.
+- Select one of the **SPIFFS** partition schemes (e.g., **"Default 4MB with spiffs (1.2MB APP/1.5MB SPIFFS)"**).
+
+### 5. Adjust for Boards Without Flash Disk (Optional)
+
+Some ESP32 boards do not have a flash disk. If your board lacks flash storage:
+
+- Open `Esp32_servers_config.h`.
+- Comment out the line:
+
+  ```cpp
+  #define FILE_SYSTEM FILE_SYSTEM_LITTLEFS
+  ```
+
+- This will make the oscilloscope use program memory (progmem) instead of the file system to store the `oscilloscope.html` file.
+
+### 6. Compile and Upload the Sketch
+
+- Compile the sketch by clicking the **Verify** button in the Arduino IDE.
+- Upload the sketch to your ESP32 by clicking the **Upload** button.
+
+### 7. Format the LittleFS File System
+
+- When you run the sketch on your ESP32 for the first time, it will format the flash disk with the LittleFS file system.
+- **Warning**: This will erase all data previously stored in the ESP32's flash memory.
+
+### 8. Upload HTML and Image Files via FTP
+
+To serve the web interface and icons, upload the required files to the ESP32:
+
+#### Required Files:
+
+- `oscilloscope.html`
+- `android-192-osc.png`
+- `apple-180-osc.png`
+
+#### Steps:
+
+1. **Connect to ESP32 via FTP**:
+
+   - You can use the command-line FTP utility or a GUI FTP client like FileZilla.
+   - No username or password is required.
+
+2. **FTP Command-Line Example**:
 
    ```bash
-   git clone https://github.com/yourusername/Portable_Oscilloscope.git
+   ftp YOUR-ESP32-IP
    ```
 
-2. **Install the ESP32 Board in Arduino IDE**:
-   - Open the Arduino IDE.
-   - Go to **File** > **Preferences**.
-   - In **Additional Boards Manager URLs**, add:
-     ```
-     https://dl.espressif.com/dl/package_esp32_index.json
-     ```
-   - Go to **Tools** > **Board** > **Boards Manager**.
-   - Search for **ESP32** and install **"esp32" by Espressif Systems**.
+   Replace `YOUR-ESP32-IP` with the IP address of your ESP32 (e.g., `192.168.1.100`).
 
-3. **Install Required Libraries**:
-   - **Adafruit SSD1306**:
-     - Go to **Tools** > **Manage Libraries**.
-     - Search for **Adafruit SSD1306** and install it.
-   - **Adafruit GFX Library**:
-     - Search for **Adafruit GFX** and install it.
-   - Install any other dependencies specified in the code.
+3. **Upload Files to `/var/www/html` Directory**:
 
-4. **Upload the Code**:
-   - Open `Portable_Oscilloscope.ino` in the Arduino IDE.
-   - Configure your Wi-Fi credentials in the code if necessary.
-   - Select your ESP32 board under **Tools** > **Board**.
-   - Choose the correct **Port**.
-   - Click **Upload** to flash the code to your ESP32.
+   ```bash
+   ftp> put android-192-osc.png /var/www/html/android-192-osc.png
+   ftp> put apple-180-osc.png /var/www/html/apple-180-osc.png
+   ftp> put oscilloscope.html /var/www/html/oscilloscope.html
+   ```
 
-5. **Assemble the Hardware**:
-   - Refer to the [Circuit Diagram and Connections](#circuit-diagram-and-connections) section.
-   - Carefully connect all components according to the diagram and connection details.
-   - Double-check all connections before powering up the device.
+   **Example Session**:
+
+   ```
+   C:\esp32_oscilloscope>ftp YOUR-ESP32-IP
+   Connected to 192.168.1.100.
+   220-ESP32 FTP server - everyone is allowed to login
+   User (192.168.1.100:(none)):
+   331 enter password
+   Password:
+   230 logged on, use "/" to refer to your home directory "/"
+   ftp> put android-192-osc.png /var/www/html/android-192-osc.png
+   226 /var/www/html/android-192-osc.png transfer complete
+   ftp> put apple-180-osc.png /var/www/html/apple-180-osc.png
+   226 /var/www/html/apple-180-osc.png transfer complete
+   ftp> put oscilloscope.html /var/www/html/oscilloscope.html
+   226 /var/www/html/oscilloscope.html transfer complete
+   ftp> bye
+   ```
+
+4. **Using Windows Explorer (Optional)**:
+
+   - Open Windows Explorer.
+   - Enter `ftp://YOUR-ESP32-IP` in the address bar.
+   - Copy the files into the `/var/www/html` directory.
+
+### 9. Access the Oscilloscope Web Interface
+
+- Open a web browser on your computer or smartphone.
+- Navigate to `http://YOUR-ESP32-IP/oscilloscope.html`.
+- Replace `YOUR-ESP32-IP` with the actual IP address of your ESP32.
+- The oscilloscope interface should load, and you can start using it.
 
 ## Usage
 
 1. **Power On the Device**:
+
    - Connect the ESP32 to a power source (USB cable connected to a computer or a battery pack).
 
 2. **Connect to Wi-Fi**:
-   - The ESP32 will initialize and either create a Wi-Fi access point or connect to your network.
-   - The OLED display will show a QR code and IP address.
+
+   - The ESP32 will initialize and connect to your specified Wi-Fi network.
+   - The OLED display will show a QR code and the IP address.
 
 3. **Access the Web Interface**:
+
    - Scan the QR code with your smartphone, or enter the IP address into a web browser.
-   - The oscilloscope interface should load, displaying real-time waveform data.
+   - The oscilloscope interface will load, displaying real-time waveform data.
 
 4. **Using the Oscilloscope**:
-   - Connect the probes to the signals you wish to analyze.
-   - Use the **3-way switches** to adjust probe settings, such as voltage range or coupling mode.
-   - Interact with the web interface to adjust time base, trigger settings, and other parameters.
 
-5. **Diagnostics and Adjustments**:
-   - If the waveform is not displayed correctly, check the probe connections and switch positions.
-   - Ensure that the signal levels are within the acceptable range for the ESP32's ADC.
+   - **Connect Probes**:
+     - Attach the probes to the signals you wish to analyze.
+   - **Adjust Probe Settings**:
+     - Use the **3-way switches** to select probe modes (e.g., attenuation, coupling).
+   - **Interact with Web Interface**:
+     - Adjust time base, trigger settings, voltage scale, and other parameters through the web interface.
+   - **Start/Stop Acquisition**:
+     - Use on-screen controls to start or stop signal acquisition.
+
+5. **Diagnostics and Troubleshooting**:
+
+   - **No Waveform Displayed**:
+     - Check probe connections and ensure they are properly attached to the signal source.
+     - Verify that the switches are in the correct positions.
+   - **Network Issues**:
+     - Ensure that the ESP32 is connected to the correct Wi-Fi network.
+     - Check the OLED display for the IP address and ensure your device is on the same network.
 
 ## Modifications and Enhancements
 
 This project includes several key modifications from the original:
 
 1. **Updated HTML File**:
-   - Improved web interface with enhanced user experience.
-   - Added controls for better interaction with the oscilloscope functions.
+
+   - The web interface has been improved for better usability.
+   - New features and controls have been added to enhance functionality.
 
 2. **OLED Display with QR Codes**:
-   - Integrated OLED display provides immediate device status feedback.
-   - Displays a QR code for quick and easy access to the web interface.
-   - Eliminates the need to manually find the device's IP address.
+
+   - An OLED display has been integrated to show the device status.
+   - Displays a QR code for quick access to the oscilloscope interface.
+   - Provides visual feedback without the need for additional devices.
 
 3. **Special 3-Way Switches for Probe Control**:
-   - Physical switches allow for rapid adjustments to probe settings.
-   - Enhances usability during hands-on diagnostics without relying solely on the web interface.
-   - Provides precise control over probe functions like attenuation and coupling.
+
+   - Physical **3-way switches** have been added to control the probes.
+   - Allows for immediate and precise adjustments without navigating the web interface.
+   - Enhances the user experience during hands-on diagnostics.
 
 ## Acknowledgements
 
@@ -209,3 +308,36 @@ Feel free to contribute to this project by submitting issues or pull requests. Y
 # Additional Information
 
 If you have any questions or need assistance with setting up or modifying the oscilloscope, please don't hesitate to reach out via the project's issue tracker on GitHub.
+
+---
+
+**Note**: Always exercise caution when working with electronic components and circuits. Ensure that all power sources are appropriate for your project to prevent damage to components or injury.
+
+---
+
+Happy tinkering!
+
+# Troubleshooting
+
+If you encounter issues during setup or usage, consider the following tips:
+
+- **Compilation Errors**:
+  - Ensure all required libraries are installed and up to date.
+  - Double-check that the correct board and partition scheme are selected.
+
+- **FTP Connection Problems**:
+  - Verify that the ESP32 is connected to the Wi-Fi network.
+  - Make sure you are using the correct IP address.
+  - Check firewall settings that might block FTP connections.
+
+- **Files Not Serving Correctly**:
+  - Ensure that the files are uploaded to the correct directory (`/var/www/html`).
+  - Confirm that the filenames are correct and match those referenced in the code.
+
+- **OLED Display Not Working**:
+  - Check the wiring connections between the OLED display and the ESP32.
+  - Ensure that the I2C address in the code matches your OLED display's address.
+
+# Conclusion
+
+By following these instructions, you should have a fully functional portable oscilloscope based on the ESP32 microcontroller. This project not only provides practical functionality but also offers an opportunity to learn and experiment with microcontrollers, networking, and web technologies.
