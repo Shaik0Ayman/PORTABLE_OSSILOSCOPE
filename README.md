@@ -67,26 +67,17 @@ A schematic of the circuit connections is essential for assembling the oscillosc
 Assuming two probes, each with a 3-way switch:
 
 - **Probe 1 Switch**:
-  - Connect the common pin (C) to **GPIO 32** on the ESP32.
-  - Connect one side (Position 1) to **3.3V**.
-  - Connect the other side (Position 2) to **GND**.
+  - Connect the common pin (C) to **GND**.
+  - Connect one side (Position 1) to **GPIO 2** on the ESP32.
+  - Connect the other side (Position 2) to ***GPIO 32** on the ESP32.
 
 - **Probe 2 Switch**:
-  - Connect the common pin (C) to **GPIO 33** on the ESP32.
-  - Connect one side (Position 1) to **3.3V**.
-  - Connect the other side (Position 2) to **GND**.
+  - Connect the common pin (C) to **GND**.
+  - Connect one side (Position 1) to **GPIO 4** on the ESP32.
+  - Connect the other side (Position 2) to ***GPIO 35** on the ESP32.
 
 These switches allow you to change the probe settings without using the web interface.
 
-#### Analog Probe Connections
-
-- **Probe 1**:
-  - Signal wire to **GPIO 34** (Analog Input).
-  - Ground wire to **GND**.
-
-- **Probe 2**:
-  - Signal wire to **GPIO 35** (Analog Input).
-  - Ground wire to **GND**.
 
 #### Additional Connections
 
