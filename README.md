@@ -13,7 +13,7 @@ A portable oscilloscope based on the ESP32 microcontroller, enhanced with additi
 - [Simulation](#simulation)
 - [Setup and Installation](#setup-and-installation)
 - [Usage](#usage)
-- [CAD and designs](#CAD and designs)
+- [CAD and designs](#CAD-and-designs)
 - [Modifications and Enhancements](#modifications-and-enhancements)
 - [Acknowledgements](#acknowledgements)
 - [License](#license)
