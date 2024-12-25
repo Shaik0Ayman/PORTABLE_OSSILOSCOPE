@@ -13,6 +13,7 @@ A portable oscilloscope based on the ESP32 microcontroller, enhanced with additi
 - [Simulation](#simulation)
 - [Setup and Installation](#setup-and-installation)
 - [Usage](#usage)
+- [CAD and designs](#CAD and designs)
 - [Modifications and Enhancements](#modifications-and-enhancements)
 - [Acknowledgements](#acknowledgements)
 - [License](#license)
@@ -287,6 +288,9 @@ This project includes several key modifications from the original:
 - **BojanJurca**: Original creator of the [Esp32_oscilloscope](https://github.com/BojanJurca/Esp32_oscilloscope).
 - **Wokwi Community**: For providing the simulation platform and resources.
 - **Open Source Community**: For libraries and tools that have made this project possible.
+
+## CAD and designs
+The project includes cad and stl files to be used as a casing for the deivce 
 
 ## License
 
